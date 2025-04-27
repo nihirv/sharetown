@@ -2,13 +2,8 @@ import { clearUserName, resetBetHistory } from "@/lib/user";
 import Header from "@/components/layout/Header";
 import Container from "@/components/layout/Container";
 import ProposalList from "@/components/proposal/ProposalList";
-import supabase from "@/lib/supabase";
-import { useProposals } from "@/hooks/useProposals";
-import { toast } from "sonner";
 
 export default function Home() {
-  const { isLoading } = useProposals();
-
   function handleReset() {
     clearUserName();
     resetBetHistory();
