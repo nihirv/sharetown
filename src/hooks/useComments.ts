@@ -45,7 +45,7 @@ export function useComments(proposalId: string) {
 
   /* 3) add comment helper */
   const addComment = useMutation({
-    mutationFn: (body: string) =>
+    mutationFn: async (body: string) =>
       supabase.from("comments").insert({
         proposal_id: proposalId,
         user_name: "You",

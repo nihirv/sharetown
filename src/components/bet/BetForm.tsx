@@ -1,6 +1,6 @@
 import { useState } from "react";
 import StakeInput from "./StakeInput";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { hasBet } from "@/lib/user";
 

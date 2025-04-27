@@ -1,5 +1,5 @@
 import { ArrowBigUp, MessageSquare } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { formatDistanceToNowStrict } from "date-fns";
 
 export interface CommentType {
