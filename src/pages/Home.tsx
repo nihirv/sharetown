@@ -19,7 +19,7 @@ export default function Home() {
     <>
       <Header />
       <Container>
-        <h1 className="text-3xl font-extrabold mb-6">Active Proposals</h1>
+        <h1 className="text-3xl font-medium mb-6">Active Proposals</h1>
         <ProposalList />
 
         <div className="flex flex-col">
