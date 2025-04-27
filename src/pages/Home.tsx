@@ -5,10 +5,9 @@ import ProposalList from "@/components/proposal/ProposalList";
 import supabase from "@/lib/supabase";
 import { useProposals } from "@/hooks/useProposals";
 import { toast } from "sonner";
-import { useResetDemo } from "@/hooks/useResetDemo";
 
 export default function Home() {
-  const { data = [], isLoading } = useProposals();
+  const { isLoading } = useProposals();
 
   function handleReset() {
     clearUserName();

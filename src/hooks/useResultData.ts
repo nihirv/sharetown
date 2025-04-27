@@ -42,7 +42,7 @@ export function useResultData(
 
       return {
         payout: payoutRow?.amount ?? 0,
-        stake: stakeRows[0]?.stake ?? 0,
+        stake: stakeRows?.[0]?.stake ?? 0,
       };
     },
   });

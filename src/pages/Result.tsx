@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import Container from "@/components/layout/Container";
-import { Badge } from "@/components/ui/badge";
-import { PartyPopper, ArrowLeft } from "lucide-react";
+import { Badge } from "@/components/ui/Badge";
+import { ArrowLeft } from "lucide-react";
 import { getUserName } from "@/lib/user";
 import { useResultData } from "@/hooks/useResultData";
 import Confetti from "react-confetti";

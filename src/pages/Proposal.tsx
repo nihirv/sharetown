@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Container from "@/components/layout/Container";
 import ProgressBar from "@/components/ui/ProgressBar";
@@ -12,7 +13,7 @@ import { useProposal } from "@/hooks/useProposal";
 
 export default function Proposal() {
   const { id } = useParams<{ id: string }>();
-  const { data: proposal, isLoading } = useProposal(id);
+  const { data: proposal } = useProposal(id);
 
   const { bets, totalStake, placeBet } = useBets(proposal?.id!);
 
@@ -22,13 +23,11 @@ export default function Proposal() {
     .reduce((s, b) => s + b.stake, 0);
   const potholesStake = totalStake - garbageStake;
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-  const { comments, addComment } = useComments(proposal?.id!);
+  const { comments } = useComments(proposal?.id!);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("in useEffect", proposal);
     if (proposal?.id && proposal?.is_closed) {
       navigate(`/p/${proposal.id}/result`, { replace: true });
     }

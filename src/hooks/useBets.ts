@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import supabase from "@/lib/supabase";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getUserName, recordBet } from "@/lib/user";
 
 export interface Bet {
@@ -64,8 +64,6 @@ export function useBets(proposalId: string) {
 
   const pctGarbage = totalStake ? garbageStake / totalStake : 0;
   const pctPotholes = totalStake ? 1 - pctGarbage : 0;
-
-  const qc = useQueryClient();
 
   const placeBet = useMutation({
     mutationFn: async (payload: { outcome: string; stake: number }) => {

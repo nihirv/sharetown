@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Proposal } from "@/types";
 import { Card } from "@/components/ui/card";
 import SparkLine from "@/components/charts/SparkLine";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/Badge";
 import { differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 

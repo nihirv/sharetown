@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useBets } from "@/hooks/useBets";
+import { Bet, useBets } from "@/hooks/useBets";
 import { useEffect, useState } from "react";
 
 ChartJS.register(
@@ -42,7 +42,12 @@ export default function SparkLine({ proposalId }: Props) {
 
     // Calculate running percentages
     const runningHistory = bets.reduce(
-      (acc, bet, i, arr) => {
+      (
+        acc: { garbage: number[]; potholes: number[] },
+        _bet: Bet,
+        i: number,
+        arr: Bet[]
+      ) => {
         const currentSlice = arr.slice(0, i + 1);
         const garbageTotal = currentSlice
           .filter((b) => b.outcome === "garbage")
