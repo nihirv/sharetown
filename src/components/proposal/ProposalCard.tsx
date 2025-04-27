@@ -40,7 +40,7 @@ export default function ProposalCard({ proposal }: Props) {
 
         {/* description */}
         {proposal.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2">
+          <p className="text-sm text-muted-foreground">
             {proposal.description}
           </p>
         )}

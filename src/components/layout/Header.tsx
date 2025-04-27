@@ -7,7 +7,7 @@ export default function Header() {
       <div className="mx-auto max-w-screen-md flex items-center gap-3 px-4 py-3">
         <Building2 className="size-5 shrink-0" />
         <Link to="/" className="font-semibold">
-          ShareTown // Lambeth
+          ShareTown // Westminster
         </Link>
         <span className="ml-auto">
           <User className="size-5 opacity-70" />
