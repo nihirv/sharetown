@@ -55,6 +55,7 @@ export default function Proposal() {
       <ProgressBar
         opt1={stakesByOutcome?.[proposal.options[0]] || 0}
         opt2={stakesByOutcome?.[proposal.options[1]] || 0}
+        options={proposal.options}
       />
 
       {/* chart with dotted background */}

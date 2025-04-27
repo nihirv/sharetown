@@ -4,9 +4,15 @@ interface Props {
   opt1: number;
   opt2: number;
   className?: string;
+  options?: string[]; // Add options prop
 }
 
-export default function ProgressBar({ opt1, opt2, className }: Props) {
+export default function ProgressBar({
+  opt1,
+  opt2,
+  className,
+  options = ["Option 1", "Option 2"],
+}: Props) {
   const o1 = Number.isFinite(opt1) && opt1 >= 0 ? opt1 : 0;
   const o2 = Number.isFinite(opt2) && opt2 >= 0 ? opt2 : 0;
   const total = o1 + o2;
@@ -23,8 +29,8 @@ export default function ProgressBar({ opt1, opt2, className }: Props) {
         className={cn("rounded-xl bg-white p-4 space-y-2 shadow-sm", className)}
       >
         <div className="flex justify-between text-sm font-medium">
-          <span>Garbage Collection: £0</span>
-          <span>Potholes: £0</span>
+          <span>{options[0]}: £0</span>
+          <span>{options[1]}: £0</span>
         </div>
         <div className="h-3 w-full rounded-full overflow-hidden bg-muted" />
       </div>
@@ -39,8 +45,12 @@ export default function ProgressBar({ opt1, opt2, className }: Props) {
       className={cn("rounded-xl bg-white p-4 space-y-2 shadow-sm", className)}
     >
       <div className="flex justify-between text-sm font-medium">
-        <span>Garbage Collection: {opt1Value}</span>
-        <span>Potholes: {opt2Value}</span>
+        <span>
+          {options[0]}: {opt1Value}
+        </span>
+        <span>
+          {options[1]}: {opt2Value}
+        </span>
       </div>
 
       <div className="h-3 w-full rounded-full overflow-hidden bg-muted flex">
