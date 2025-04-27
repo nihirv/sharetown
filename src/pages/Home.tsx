@@ -14,26 +14,6 @@ export default function Home() {
     resetBetHistory();
     window.location.reload();
   }
-  async function handleClose() {
-    const { error } = await supabase.rpc("close_proposal", {
-      p_id: "880af0fe-b6ef-463b-9cfe-c64f689001de",
-    });
-    toast(error ? error.message : "Proposal closed");
-  }
-
-  async function handleResetDatabase() {
-    if (confirm("Reset the demo database?")) {
-      const { data, error } = await supabase.rpc("reset_demo"); // ← capture both
-      console.log({ data, error });
-      if (error) {
-        toast("Reset failed", {
-          description: error.message,
-        });
-      } else {
-        window.location.reload();
-      }
-    }
-  }
 
   return (
     <>
@@ -48,19 +28,6 @@ export default function Home() {
             className="mt-10 text-xs underline text-muted-foreground"
           >
             Reset name & bet history
-          </button>
-          <button
-            onClick={handleClose}
-            className="mt-10 text-xs underline text-muted-foreground"
-          >
-            Close Proposal (demo)
-          </button>
-          <button
-            onClick={handleResetDatabase}
-            disabled={isLoading}
-            className="text-xs underline text-muted-foreground"
-          >
-            Reset Database
           </button>
         </div>
       </Container>

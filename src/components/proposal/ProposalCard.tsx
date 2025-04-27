@@ -5,6 +5,7 @@ import SparkLine from "@/components/charts/SparkLine";
 import { Badge } from "@/components/ui/Badge";
 import { differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useBets } from "@/hooks/useBets";
 
 interface Props {
   proposal: Proposal;
@@ -15,6 +16,9 @@ export default function ProposalCard({ proposal }: Props) {
     0,
     differenceInDays(new Date(proposal.closes_at), new Date())
   );
+
+  const { bets } = useBets(proposal.id);
+  const voteCount = bets.length;
 
   return (
     <Link to={`/p/${proposal.id}`}>
@@ -33,6 +37,41 @@ export default function ProposalCard({ proposal }: Props) {
             {proposal.is_closed ? "Closed" : "Open"}
           </Badge>
         </div>
+
+        {/* description */}
+        {proposal.description && (
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {proposal.description}
+          </p>
+        )}
+
+        {/* images (if available) */}
+        {proposal.image_url && proposal.image_url.length > 0 && (
+          <div className="w-full h-40 overflow-hidden rounded-md grid grid-cols-1 gap-2">
+            {proposal.image_url.length === 1 ? (
+              <img
+                src={proposal.image_url[0]}
+                alt={proposal.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="grid grid-cols-2 gap-2 h-full">
+                {proposal.image_url.slice(0, 4).map((url, index) => (
+                  <div
+                    key={index}
+                    className="overflow-hidden rounded-md h-full"
+                  >
+                    <img
+                      src={url}
+                      alt={`${proposal.title} - image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* chart grid BG mimicking mock-up */}
         <div className="relative">
@@ -57,7 +96,7 @@ export default function ProposalCard({ proposal }: Props) {
 
         {/* meta row */}
         <div className="text-sm flex justify-between text-muted-foreground pt-2 border-t">
-          <span>Votes: 234</span>
+          <span>Votes: {voteCount}</span>
           <span>Ends in {daysLeft} days</span>
         </div>
       </Card>
