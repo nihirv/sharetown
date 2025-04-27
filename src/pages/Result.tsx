@@ -6,6 +6,7 @@ import { getUserName } from "@/lib/user";
 import { useResultData } from "@/hooks/useResultData";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@uidotdev/usehooks"; // 1-line size hook
+import { cn } from "@/lib/utils";
 
 export default function Result() {
   const { id } = useParams<{ id: string }>();
@@ -55,18 +56,22 @@ export default function Result() {
               <span className="font-medium">£{n(stats.council_take)}</span>
             </p>
 
-            <div className="flex justify-between">
-              <Badge variant="outline">Garbage</Badge>
-              <span>
-                {stats.votes_g} votes • £{n(stats.vol_g)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <Badge variant="outline">Potholes</Badge>
-              <span>
-                {stats.votes_p} votes • £{n(stats.vol_p)}
-              </span>
-            </div>
+            {stats.options.map((option, index) => (
+              <div key={option} className="flex justify-between">
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    index === 0 ? "bg-emerald-200" : "bg-indigo-200"
+                  )}
+                >
+                  {option}
+                </Badge>
+                <span>
+                  {stats.votes[option] || 0} votes • £
+                  {n(stats.volumes[option] || 0)}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 

@@ -9,10 +9,9 @@ export interface MyResult {
 
 export interface RoundStats {
   council_take: number;
-  votes_g: number;
-  vol_g: number;
-  votes_p: number;
-  vol_p: number;
+  votes: Record<string, number>;
+  volumes: Record<string, number>;
+  options: string[];
 }
 
 export function useResultData(
@@ -52,19 +51,50 @@ export function useResultData(
     queryKey: ["roundStats", proposalId],
     enabled: !!proposalId,
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("proposal_stats", {
+      // First get the proposal to get the options
+      const { data: proposal } = await supabase
+        .from("proposals")
+        .select("options")
+        .eq("id", proposalId)
+        .single();
+
+      const options = proposal?.options || [];
+
+      // Fetch all bets for this proposal
+      const { data: bets = [] } = await supabase
+        .from("bets")
+        .select("outcome, stake")
+        .eq("proposal_id", proposalId);
+
+      // Get council take from the stats function (or calculate if needed)
+      const { data: statsData, error } = await supabase.rpc("proposal_stats", {
         p_id: proposalId,
       });
+
       if (error) throw error;
-      return (
-        data?.[0] ?? {
-          council_take: 0,
-          votes_g: 0,
-          vol_g: 0,
-          votes_p: 0,
-          vol_p: 0,
-        }
-      );
+
+      // Initialize empty stats with the options
+      const stats = {
+        council_take: statsData?.[0]?.council_take || 0,
+        votes: {} as Record<string, number>,
+        volumes: {} as Record<string, number>,
+        options: options,
+      };
+
+      // Calculate votes and volumes from bets data
+      options.forEach((option: string) => {
+        // Count votes (number of bets for this option)
+        stats.votes[option] = bets!.filter(
+          (bet) => bet.outcome === option
+        ).length;
+
+        // Sum volumes (total stake for this option)
+        stats.volumes[option] = bets!
+          .filter((bet) => bet.outcome === option)
+          .reduce((sum, bet) => sum + (bet.stake || 0), 0);
+      });
+
+      return stats;
     },
   });
 
@@ -72,10 +102,9 @@ export function useResultData(
     my: myQuery.data ?? { stake: 0, payout: 0 },
     stats: aggQuery.data ?? {
       council_take: 0,
-      votes_g: 0,
-      vol_g: 0,
-      votes_p: 0,
-      vol_p: 0,
+      votes: {},
+      volumes: {},
+      options: [],
     },
     loading: myQuery.isLoading || aggQuery.isLoading,
     error: myQuery.error || aggQuery.error,

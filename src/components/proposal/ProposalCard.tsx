@@ -17,7 +17,7 @@ export default function ProposalCard({ proposal }: Props) {
     differenceInDays(new Date(proposal.closes_at), new Date())
   );
 
-  const { bets } = useBets(proposal.id);
+  const { bets } = useBets(proposal.id, proposal.options);
   const voteCount = bets.length;
 
   return (
@@ -81,17 +81,23 @@ export default function ProposalCard({ proposal }: Props) {
             <div className="border-t border-dashed border-muted-foreground/30" />
             <div className="border-t border-dashed border-muted-foreground/30" />
           </div>
-          <SparkLine proposalId={proposal.id} />
+          <SparkLine proposalId={proposal.id} options={proposal.options} />
         </div>
 
-        {/* outcome pills (placeholder) */}
+        {/* outcome pills */}
         <div className="space-y-2">
-          <div className="rounded-md bg-emerald-100 text-emerald-900 px-4 py-2 flex items-center gap-2 justify-center font-semibold">
-            {proposal.options[0]}
-          </div>
-          <div className="rounded-md bg-indigo-100 text-indigo-900 px-4 py-2 flex items-center gap-2 justify-center font-semibold">
-            {proposal.options[1]}
-          </div>
+          {proposal.options.map((option, index) => (
+            <div
+              key={option}
+              className={`rounded-md ${
+                index === 0
+                  ? "bg-emerald-100 text-emerald-900"
+                  : "bg-indigo-100 text-indigo-900"
+              } px-4 py-2 flex items-center gap-2 justify-center font-semibold`}
+            >
+              {option}
+            </div>
+          ))}
         </div>
 
         {/* meta row */}

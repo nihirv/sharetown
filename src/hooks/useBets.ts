@@ -15,7 +15,7 @@ export interface Bet {
  * Live bets for a single proposal.
  * Returns an array + simple helpers (totals, percentages).
  */
-export function useBets(proposalId: string) {
+export function useBets(proposalId: string, options?: string[]) {
   const [bets, setBets] = useState<Bet[]>([]);
 
   // 1️⃣  initial fetch
@@ -56,14 +56,25 @@ export function useBets(proposalId: string) {
     };
   }, [proposalId]);
 
-  const garbageStake = bets
-    .filter((b) => b.outcome === "garbage")
-    .reduce((s, b) => s + b.stake, 0);
+  // Calculate stakes for each outcome dynamically
+  const stakesByOutcome =
+    options?.reduce((acc, outcome) => {
+      acc[outcome] = bets
+        .filter((b) => b.outcome === outcome)
+        .reduce((sum, b) => sum + b.stake, 0);
+      return acc;
+    }, {} as Record<string, number>) || {};
 
   const totalStake = bets.reduce((s, b) => s + b.stake, 0);
 
-  const pctGarbage = totalStake ? garbageStake / totalStake : 0;
-  const pctPotholes = totalStake ? 1 - pctGarbage : 0;
+  // Calculate percentages for each outcome
+  const percentagesByOutcome =
+    options?.reduce((acc, outcome) => {
+      acc[outcome] = totalStake
+        ? (stakesByOutcome[outcome] || 0) / totalStake
+        : 0;
+      return acc;
+    }, {} as Record<string, number>) || {};
 
   const placeBet = useMutation({
     mutationFn: async (payload: { outcome: string; stake: number }) => {
@@ -88,8 +99,8 @@ export function useBets(proposalId: string) {
 
   return {
     bets,
-    pctGarbage,
-    pctPotholes,
+    stakesByOutcome,
+    percentagesByOutcome,
     totalStake,
     placeBet: placeBet.mutate,
   };

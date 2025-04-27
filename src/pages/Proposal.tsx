@@ -15,13 +15,10 @@ export default function Proposal() {
   const { id } = useParams<{ id: string }>();
   const { data: proposal } = useProposal(id);
 
-  const { bets, totalStake, placeBet } = useBets(proposal?.id!);
-
-  // Calculate actual stake amounts for each outcome
-  const garbageStake = bets
-    .filter((b) => b.outcome === "garbage")
-    .reduce((s, b) => s + b.stake, 0);
-  const potholesStake = totalStake - garbageStake;
+  const { stakesByOutcome, placeBet } = useBets(
+    proposal?.id!,
+    proposal?.options
+  );
 
   const { comments } = useComments(proposal?.id!);
 
@@ -55,7 +52,10 @@ export default function Proposal() {
         onChange={setSelected}
       />
 
-      <ProgressBar opt1={garbageStake} opt2={potholesStake} />
+      <ProgressBar
+        opt1={stakesByOutcome?.[proposal.options[0]] || 0}
+        opt2={stakesByOutcome?.[proposal.options[1]] || 0}
+      />
 
       {/* chart with dotted background */}
       <div className="relative">
@@ -67,7 +67,7 @@ export default function Proposal() {
             />
           ))}
         </div>
-        <SparkLine proposalId={proposal.id!} />
+        <SparkLine proposalId={proposal.id!} options={proposal.options} />
       </div>
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Discussion</h2>
